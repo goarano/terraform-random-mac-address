@@ -8,8 +8,8 @@ resource "random_shuffle" "second_char" {
   result_count = 1
 }
 
-resource "terraform_data" "mac_address" {
-  input = upper(
+locals {
+  mac_address = upper(
     format("%s%s:%s:%s:%s:%s:%s",
       substr(random_id.address_bytes.hex, 0, 1),
       random_shuffle.second_char.result[0],
@@ -20,10 +20,7 @@ resource "terraform_data" "mac_address" {
       substr(random_id.address_bytes.hex, 9, 2),
     )
   )
-}
-
-resource "terraform_data" "interface_name" {
-  input = lower(
+  interface_name = lower(
     format("enx%s%s%s",
       substr(random_id.address_bytes.hex, 0, 1),
       random_shuffle.second_char.result[0],
